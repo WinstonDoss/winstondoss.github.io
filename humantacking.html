@@ -15,7 +15,6 @@
 			<!-- Intro -->
 			<div id="intro">
 				<h1>Human Tracking Project</h1>
-				<p>Exploring advanced techniques in real-time multi-sensor data fusion for human tracking.</p>
 				<ul class="actions">
 					<li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Explore</a></li>
 				</ul>
@@ -40,43 +39,70 @@
 				<article class="post featured">
 					<header class="major">
 						<h2>Real-Time Human Tracking with Lidar and Camera Fusion</h2>
-						<p>This project demonstrates a multi-sensor fusion approach for robust real-time human tracking, utilizing both Lidar and camera data.</p>
 					</header>
-					<a href="#" class="image main"><img src="images/project-human-tracking.jpg" alt="Human Tracking Project" /></a>
-					<p>This human-tracking system combines Lidar and camera data for accurate position estimation, even in cluttered environments. The project addresses challenges in sensor synchronization, occlusion management, and false-positive reduction using predictive modeling and data fusion algorithms.</p>
-					<ul class="actions special">
-						<li><a href="#" class="button large">View Code on GitHub</a></li>
-					</ul>
-				</article>
+					<h3>Problem</h3>
+					<p>
+						Autonomous mobile robots are increasingly deployed in 
+						human-centric environments—such as warehouses, 
+						hotels, and offices—for applications like material handling, 
+						customer interaction, and surveillance. However, effective 
+						real-time human tracking in these dynamic settings remains 
+						a challenge. Existing solutions often rely on high-cost, 
+						sophisticated sensors that increase system complexity and cost,
+						 limiting large-scale deployment in practical settings. 
+						 The goal is to develop a cost-effective tracking solution that
+						  enables robots to reliably detect and track humans in 
+						  real-time, even in cluttered environments with occlusions.</p>
+					<h3>Solution</h3>
+					<a class="image main"><img src="images/overall.png" alt="Human Tracking Project" /></a>
+					<p>
+						This study introduces a low-cost, multi-sensor fusion approach 
+						that combines a 2D LiDAR and monocular camera for human tracking
+						and position estimation. Key components of the solution 
+						include:</p>
+					<h4 style="text-align: left;">Detection</h4>
+					<p>
+						The LiDAR detects human legs within a 4-meter range(after background subtraction), using 
+						a combination of density-based clustering and least-squares based circle fitting.
+						Clustering is performed to group points which are proximate to each other
+						and these clusters are then fit into a circle using least squares.
+						If the curvature of the circle is within a set threshold the cluster is considered a 
+						detection of a human leg.
+						As this is a geometry based method, shapes which are similar to a human leg are falsely
+						detected.
+						Yolo-v4 based camera detection has been shown to give quite accurate detections of humans but the detections are with respect to the image.
+						Therefore we leverage the accuracy of the Yolo model to remove false detections from the lidar detections.
+					</p>
+					<a class="image main"><img src="images/yolofit.png" alt="" /></a>
 
-				<!-- Project Details -->
-				<section class="posts">
-					<article>
-						<header>
-							<h3>Calibration and Data Synchronization</h3>
-						</header>
-						<p>Data fusion begins with intrinsic and extrinsic calibration to align Lidar and camera frames. Synchronization is managed using a ROS-based time synchronizer, ensuring sensor data captured within a 0.6-second window are processed together for real-time performance.</p>
-					</article>
-					<article>
-						<header>
-							<h3>Fusion and Detection Techniques</h3>
-						</header>
-						<p>The system leverages YOLO-based camera detections to filter false positives from Lidar detections, using projection techniques and the Hungarian algorithm for data association. By projecting Lidar points onto the camera frame, reliable human tracking is achieved.</p>
-					</article>
-					<article>
-						<header>
-							<h3>Challenges and Occlusion Management</h3>
-						</header>
-						<p>Handling occlusions in crowded environments is crucial. The Extended Kalman Filter (EKF) enables predictions when measurements are unavailable, ensuring consistent tracking of individuals even during temporary occlusions.</p>
-					</article>
-					<article>
-						<header>
-							<h3>Gallery</h3>
-						</header>
-						<div class="image fit"><img src="images/human-tracking-action.jpg" alt="Tracking in action" /></div>
-						<div class="image fit"><img src="images/human-tracking-results.jpg" alt="Tracking results" /></div>
-					</article>
-				</section>
+					<h4 style="text-align: left;">Data Fusion and Calibration</h4>
+					<p>
+						The camera and LiDAR data are calibrated and synchronized, 
+						with extrinsic and intrinsic calibration aligning the sensors 
+						frames. Aligning the frames allows us to project lidar detections
+						onto the image frame to remove false positives.
+						ROS-based time synchronization ensures data from both sensors
+						are processed in real-time, within a 0.6-second threshold, 
+						enabling precise temporal alignment.
+					</p>
+					
+					<h4 style="text-align: left;">Extended Kalman Filter (EKF) for Continuous Tracking:</h4>
+					<p>
+						An EKF processes the combined data to track individuals across
+						 frames, using a constant linear and angular velocity motion 
+						 model to remove noise and also to predict human trajectories 
+						 Predictions are possible even when direct measurements are temporarily unavailable. 
+						 This predictive capability allows the system to handle 
+						 occlusions and maintain accurate tracking, even in crowded 
+						 environments.
+					</p>
+
+					<p>For further details, you can read my paper:</p>
+					<ul class="actions special">
+						<li><a href="https://ieeexplore.ieee.org/document/10745641" class="button large">Read my paper</a></li>
+					</ul>				
+					
+				</article>
 			</div>
 
 			<!-- Footer -->
@@ -88,7 +114,7 @@
 					</section>
 					<section>
 						<h3>Email</h3>
-						<p><a href="mailto:info@myportfolio.com">info@myportfolio.com</a></p>
+						<p><a href="mailto:winston.doss@gmail.com">winston.doss@gmail.com</a></p>
 					</section>
 				</section>
 			</footer>
