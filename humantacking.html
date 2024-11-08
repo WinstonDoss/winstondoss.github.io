@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Human Tracking Project - My Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+		<div id="wrapper" class="fade-in">
+
+			<!-- Intro -->
+			<div id="intro">
+				<h1>Human Tracking Project</h1>
+				<p>Exploring advanced techniques in real-time multi-sensor data fusion for human tracking.</p>
+				<ul class="actions">
+					<li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Explore</a></li>
+				</ul>
+			</div>
+
+			<!-- Header -->
+			<header id="header">
+				<a href="project.html" class="logo">Back to Projects</a>
+			</header>
+
+			<!-- Nav -->
+			<nav id="nav">
+				<ul class="icons">
+					<li><a href="#" class="icon brands fa-linkedin"><span class="label">Linkedin</span></a></li>
+					<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+				</ul>
+			</nav>
+
+			<!-- Main Content -->
+			<div id="main">
+				<!-- Project Overview -->
+				<article class="post featured">
+					<header class="major">
+						<h2>Real-Time Human Tracking with Lidar and Camera Fusion</h2>
+						<p>This project demonstrates a multi-sensor fusion approach for robust real-time human tracking, utilizing both Lidar and camera data.</p>
+					</header>
+					<a href="#" class="image main"><img src="images/project-human-tracking.jpg" alt="Human Tracking Project" /></a>
+					<p>This human-tracking system combines Lidar and camera data for accurate position estimation, even in cluttered environments. The project addresses challenges in sensor synchronization, occlusion management, and false-positive reduction using predictive modeling and data fusion algorithms.</p>
+					<ul class="actions special">
+						<li><a href="#" class="button large">View Code on GitHub</a></li>
+					</ul>
+				</article>
+
+				<!-- Project Details -->
+				<section class="posts">
+					<article>
+						<header>
+							<h3>Calibration and Data Synchronization</h3>
+						</header>
+						<p>Data fusion begins with intrinsic and extrinsic calibration to align Lidar and camera frames. Synchronization is managed using a ROS-based time synchronizer, ensuring sensor data captured within a 0.6-second window are processed together for real-time performance.</p>
+					</article>
+					<article>
+						<header>
+							<h3>Fusion and Detection Techniques</h3>
+						</header>
+						<p>The system leverages YOLO-based camera detections to filter false positives from Lidar detections, using projection techniques and the Hungarian algorithm for data association. By projecting Lidar points onto the camera frame, reliable human tracking is achieved.</p>
+					</article>
+					<article>
+						<header>
+							<h3>Challenges and Occlusion Management</h3>
+						</header>
+						<p>Handling occlusions in crowded environments is crucial. The Extended Kalman Filter (EKF) enables predictions when measurements are unavailable, ensuring consistent tracking of individuals even during temporary occlusions.</p>
+					</article>
+					<article>
+						<header>
+							<h3>Gallery</h3>
+						</header>
+						<div class="image fit"><img src="images/human-tracking-action.jpg" alt="Tracking in action" /></div>
+						<div class="image fit"><img src="images/human-tracking-results.jpg" alt="Tracking results" /></div>
+					</article>
+				</section>
+			</div>
+
+			<!-- Footer -->
+			<footer id="footer">
+				<section class="split contact">
+					<section class="alt">
+						<h3>Contact</h3>
+						<p>If you'd like to know more about this project, please reach out.</p>
+					</section>
+					<section>
+						<h3>Email</h3>
+						<p><a href="mailto:info@myportfolio.com">info@myportfolio.com</a></p>
+					</section>
+				</section>
+			</footer>
+
+			<!-- Copyright -->
+			<div id="copyright">
+				<ul><li>&copy; My Portfolio</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+			</div>
+
+		</div>
+
+		<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
