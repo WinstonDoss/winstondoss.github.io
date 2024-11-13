@@ -1,7 +1,9 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML>  
 <html>
 	<head>
-		<title>Project Details - My Portfolio</title>
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+		<title>Omni Wheel Project - My Portfolio</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -14,8 +16,7 @@
 
 			<!-- Intro -->
 			<div id="intro">
-				<h1>Project Details</h1>
-				<p>A closer look at my work in robotics.</p>
+				<h1>Omni Wheel Project</h1>
 				<ul class="actions">
 					<li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Explore</a></li>
 				</ul>
@@ -23,13 +24,13 @@
 
 			<!-- Header -->
 			<header id="header">
-				<a href="index.html" class="logo">Back to Portfolio</a>
+				<a href="project.html" class="logo">Back to Projects</a>
 			</header>
 
 			<!-- Nav -->
 			<nav id="nav">
 				<ul class="icons">
-					<li><a href="#" class="icon brands fa-linkedin"><span class="label">Linkedin</span></a></li>
+					<li><a href="#" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
 					<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
 				</ul>
 			</nav>
@@ -39,38 +40,158 @@
 				<!-- Project Overview -->
 				<article class="post featured">
 					<header class="major">
-						<h2>Omni-Wheeled Drawing Robot</h2>
-						<p>This project showcases my work on an omni-wheeled robot that can draw intricate patterns on any surface.</p>
+						<h2>Omni-Wheeled drawing robot</h2>
 					</header>
-					<a href="#" class="image main"><img src="images/project-detail.jpg" alt="Omni-Wheeled Drawing Robot" /></a>
-					<p>The omni-wheeled robot was designed to handle multi-directional movement, enabling it to draw complex designs. The project involved integrating motors, sensors, and a control system, providing precision and agility in robot movement.</p>
-					<ul class="actions special">
-						<li><a href="#" class="button large">View Code on GitHub</a></li>
-					</ul>
-				</article>
+					<h3>Introduction</h3>
+					<p>
+						The objective of the competition was to design and develop an omni-wheel-based robotic system capable of accurately 
+						drawing shapes derived from an image. The competition was structured in multiple stages, with each stage designed 
+						to progressively lead to the final task. In the following sections, I will walk through the various tasks that we
+						 successfully implemented during the competition.
+					</p>
+					<h3>Steps in the Development of the Omni-Wheel Robot</h3>
+					<!-- <a class="image main"><img src="images/omniwheel_overview.png" alt="Omni Wheel Project" /></a> -->
+					<h4>Simulation</h4>
+					<h5 style="text-align: left;">Task 1: Implementing Go-to-Goal Control with Ideal Localization</h5>
+					<img src="images/gazebo.gif" alt="Go-to-Goal Control GIF" style="max-width:100%; height:auto; margin-top:10px;">
+					<p>
+						The first task involved implementing a simple go-to-goal controller to make the simulated robot navigate to a series 
+						of desired poses. This was done under the assumption of ideal localization, meaning that the robot's position was 
+						directly provided by the simulator (Gazebo).
+						To begin, we first completed the creation of the robot's URDF (Unified Robot Description Format) model. 
+						Although the STL file for the robot’s structure was provided, we had to ensure that the URDF accurately described the robot’s geometry, joints, and link configurations. This allowed us to represent the robot correctly in the simulation environment.
+						(Show CAD picture)
+						Next, we implemented a PD (Proportional-Derivative) controller in Python to handle the robot's movement. 
+						The PD controller was designed to adjust the robot's velocity based on the error between its current position and 
+						the desired goal. This feedback control loop allowed the robot to efficiently reach its target position while
+						 minimizing oscillations.
+						(Show GIF)
+						The final step involved interfacing the controller with ROS (Robot Operating System) to facilitate communication with Gazebo. By using ROS topics and messages, we were able to send velocity commands to the robot and receive feedback from the simulator regarding the robot’s position and orientation.
 
-				<!-- Project Details -->
-				<section class="posts">
-					<article>
-						<header>
-							<h3>Challenges and Solutions</h3>
-						</header>
-						<p>One of the biggest challenges was achieving smooth, precise control over the robot's movements. I implemented PID control to fine-tune the speed and direction of the wheels, ensuring accurate drawings.</p>
-					</article>
-					<article>
-						<header>
-							<h3>Technologies Used</h3>
-						</header>
-						<p>This project utilizes various technologies, including Arduino for microcontroller programming, ROS for robot communication, and Python for control algorithms.</p>
-					</article>
-					<article>
-						<header>
-							<h3>Gallery</h3>
-						</header>
-						<div class="image fit"><img src="images/pic02.jpg" alt="Robot in action" /></div>
-						<div class="image fit"><img src="images/pic03.jpg" alt="Drawing output" /></div>
-					</article>
-				</section>
+					</p>
+					<h5 style="text-align: left;">Task 2: Implementing Go-to-Goal Control without Ideal Localization</h5>
+					<p>
+						In the second task, we extended the first task's concept by removing the assumption of ideal localization. This time,
+						 we had to calculate the individual wheel velocities based on real-time localization ata, rather than receiving 
+						 direct position feedback from the simulator.
+						To achieve localization, we implemented a system based on ArUco marker detection. Using OpenCV, we processed the 
+						images provided by Gazebo to detect the ArUco markers placed in the environment. The detection of these markers 
+						allowed us to estimate the robot's position and orientation relative to the markers, effectively providing 
+						real-world localization data.
+						Once we obtained the robot’s pose from the ArUco markers, we integrated this information with the PD controller. 
+						The controller then calculated the required linear and angular velocities needed to guide the robot toward the 
+						desired goal. However, unlike the first task, where the robot’s movements were directly controlled, we needed to 
+						convert these velocities into individual wheel velocities to drive the omni-wheels.
+						To do this, we employed inverse kinematics. Specifically, we used a matrix calculation to map the desired velocities
+						 to the individual wheel speeds. This conversion is critical for omni-wheel robots, as it allows for independent 
+						 control of each wheel, enabling the robot to move in any direction without needing to turn.
+						The matrix calculation used to convert the robot's velocities to wheel velocities is as follows:
+						(Insert matrix picture here)
+						This equation took the robot's desired linear velocity and angular velocity as inputs and provided the required 
+						velocity for each of the robot's omni-wheels. The computed wheel velocities were then sent to the motors, allowing 
+						the robot to move accordingly.
+						The entire process was integrated into the ROS framework, allowing us to test the system in simulation with Gazebo.
+						 We were able to visualize the robot’s path and ensure that it moved smoothly towards the goal, correcting any errors in real-time. The following GIF showcases the robot’s successful execution of the go-to-goal task:
+						(Insert output GIF here)
+					</p>
+					<h5 style="text-align: left;">Task 3: Open-loop control</h5>
+					<p style="margin-top: 5px; margin-bottom: 5px;">
+						In the hardware phase, our objective was to bring the robot into the real world and make it move in specific 
+						shapes: L, triangle, and circle. This phase involved several key steps, including testing individual components, 
+						assembling the hardware, and ensuring communication between the different subsystems.
+						<img src="images/componentrobo.png" alt="Go-to-Goal Control GIF" style="max-width:100%; height:auto; margin: 10px auto; display: block;">
+						<p style="margin-top: 5px; margin-bottom: 5px;"><strong>Component Testing</strong>: We began by testing each component individually to ensure they were working as expected. 
+						This initial testing helped 
+						us identify and resolve any issues before integrating them into the full system. </p>
+						<p style="margin-top: 5px; margin-bottom: 5px;"><strong>Chassis Design and Assembly</strong>: After confirming that all components were functional, we moved on to the physical 
+						assembly. We designed the chassis and had it laser-cut from an acrylic sheet to ensure precision and durability. 
+						The chassis design was made to accommodate all the necessary components such as the motors, sensors, and 
+						wiring.</p>
+						<p style="margin-top: 5px; margin-bottom: 5px;"><strong>Motor and Microcontroller Integration:</strong> We then mounted the motors on the chassis and connected them to the Atmega 
+						microcontroller. Establishing communication between the microcontroller and the motors was a critical step in 
+						ensuring that we could control the robot’s movement. Once the motors were connected, we verified that they 
+						responded correctly to control signals.</p>
+						<img src="images/patterns.gif" alt="Go-to-Goal Control GIF" style="width:1000px; height:auto; margin: 10px auto; display: block;">
+						<p style="margin-top: 5px; margin-bottom: 5px;"><strong>Code Implementation:</strong> With the hardware assembled, we wrote the control code in Arduino to calculate and send 
+						the appropriate wheel velocities to the motors. The code was designed to move the robot in predefined shapes,
+						 such as L, triangle, and circle.
+						</p>
+					</p>
+					<h5 style="text-align: left;">Task 4: Implementing Go-to-Goal Control in the Real World</h5>
+					<p style="margin-top: 5px; margin-bottom: 5px;">
+						In the task we had to implement go to control in the real world.
+						<p style="margin-top: 5px; margin-bottom: 5px;"><strong>Overhead Camera Setup:</strong> We began by mounting the overhead camera above the robot to capture its position in the 
+						workspace. The camera was connected to the laptop through a very long HDMI cable, ensuring a stable and continuous 
+						video feed. This setup allowed us to track the robot's movement and calculate the necessary control inputs for 
+						its navigation.</p>
+						<img src="images/gotogoalreal.gif" alt="Go-to-Goal Control GIF" style="width:500px; height:auto; margin: 10px auto; display: block;">
+						<p style="margin-top: 5px; margin-bottom: 5px;"><strong> Communication:</strong> To facilitate communication between the laptop and the robot, we established wireless
+						 communication using an ESP32 module on the robot. The ESP32 served as a bridge between the laptop and the 
+						 microcontroller, allowing us to transmit control commands wirelessly.</p>
+						<p style="margin-top: 5px; margin-bottom: 5px;"><strong>Aruco Marker Detection:</strong>  The next step was to implement aruco marker detection using the overhead camera’s image 
+						feed. We used OpenCV to detect the aruco markers placed on the robot and calculate its position and orientation 
+						in the environment. The real-time position data from the camera allowed us to track the robot’s movement with 
+						high accuracy.</p>
+						<p style="margin-top: 5px; margin-bottom: 5px;"><strong>PID Control for Navigation:</strong> Once we had the robot's position, we used a PID controller to calculate the necessary 
+						control inputs to drive the robot to its target location. The PID controller adjusted the wheel velocities based 
+						on the robot’s current position and the desired goal position, ensuring smooth and precise movement.</p>
+						<p style="margin-top: 5px; margin-bottom: 5px;"><strong>Communication with the Microcontroller:</strong> The control commands were transmitted from the laptop to the ESP32 over 
+						the wireless network. Once received, the ESP32 serially communicated these commands to the Atmega microcontroller
+						 on the robot. The Atmega then used the received control commands to adjust the motor speeds, directing the robot's 
+						 movement towards the desired goal.</p>
+					</p>
+					<h5 style="text-align: left;">Task 5: Drawing the Snapchat Logo and Infinity Symbol</h5>
+						<p style="margin-top: 5px; margin-bottom: 5px;">
+						In this task, we were given a picture of the Snapchat logo and tasked with programming the robot to draw it 
+						accurately. Additionally, we were required to make the robot draw an infinity symbol.
+						<img src="images/snapinf.png" alt="" style="width:500px; height:auto; margin: 10px auto; display: block;">
+						</p>
+
+						<p style="margin-top: 5px; margin-bottom: 5px;"><strong>Snapchat Logo:</strong> To start, we needed to convert the Snapchat logo into a series of discrete waypoints that
+						the robot could follow. This was accomplished using contour detection, a computer vision technique that 
+						identifies the boundaries of shapes in an image. The contours of the Snapchat logo were processed to generate 
+						a set of waypoints, each representing a position that the robot should move to. These waypoints were fed into 
+						the robot's control system one by one, enabling the robot to trace the logo's shape precisely.(Unfortunately, the video showcasing this task in action is lost.)
+						
+						</p>
+
+						<p style="margin-top: 5px; margin-bottom: 5px;"><strong>Infinity Symbol:</strong> For the infinity symbol, we took a different approach. Since the infinity symbol can be described
+						by a mathematical function called Lissajous curve, we used this function to generate the path. The mathematical equations for the infinity 
+						symbol can be expressed as:
+						</p>
+
+						<p style="text-align: center;">
+						\[
+						x(t) = 400 \cos(t)
+						\]
+						\[
+						y(t) = 200 \sin(2t)
+						\]
+						\[
+						\theta(t) = \frac{\pi}{4} \sin(t)
+						\]
+						</p>
+
+						<p style="margin-top: 5px; margin-bottom: 5px;">
+						Where \( t \) is the parameter that varies over a defined range, allowing us to plot the infinity symbol. 
+						We discretized this function into a set of waypoints, which were then given to the robot to follow, creating
+						the symbol.
+						The below diagram shows our output:
+						<img src="images/infreal.png" alt="" style="width:700px; height:auto; margin: 10px auto; display: block;">
+						</p>
+
+						<p style="margin-top: 5px; margin-bottom: 5px;"><strong>Pen Mounting:</strong> To make the drawings visible, we mounted a pen on the robot. This allowed the robot to physically 
+						trace the paths of the Snapchat logo and infinity symbol on a surface, making the shapes visibly clear as the 
+						robot moved.
+						</p>
+
+					
+
+					<!-- <p>For further details, you can read my project documentation:</p>
+					<ul class="actions special">
+						<li><a href="https://example.com/omniwheel_project_doc" class="button large">Read Documentation</a></li>
+					</ul>				 -->
+				</article>
 			</div>
 
 			<!-- Footer -->
@@ -82,7 +203,7 @@
 					</section>
 					<section>
 						<h3>Email</h3>
-						<p><a href="mailto:info@myportfolio.com">info@myportfolio.com</a></p>
+						<p><a href="mailto:winston.doss@gmail.com">winston.doss@gmail.com</a></p>
 					</section>
 				</section>
 			</footer>
