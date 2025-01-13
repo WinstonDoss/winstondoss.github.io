@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>  
+<html>
+	<head>
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+		<title>CAD Projects - My Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<style>
+			/* Style the video section to appear horizontally */
+			#video-section {
+				display: flex;
+				justify-content: space-between;
+				gap: 20px;
+				flex-wrap: wrap;
+			}
+
+			#video-section article {
+				flex: 1;
+				max-width: 45%; /* Ensure videos take up 45% of the container width */
+			}
+
+			/* Center the heading for project demo videos */
+			#video-section h2 {
+				text-align: center;
+				width: 100%;
+			}
+
+			/* Style the videos to fit properly */
+			video {
+				width: 100%; /* Allow the videos to scale to 100% of their container width */
+				max-height: 1200px; /* Limit the height */
+				object-fit: cover; /* Ensure proper scaling without distortion */
+			}
+
+			/* Responsive adjustments */
+			@media (max-width: 768px) {
+				#video-section {
+					flex-direction: column; /* Stack videos vertically on small screens */
+					align-items: center;
+				}
+
+				#video-section article {
+					max-width: 100%; /* Ensure videos take full width on smaller screens */
+					margin-bottom: 20px;
+				}
+			}
+		</style>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+		<div id="wrapper" class="fade-in">
+
+			<!-- Intro -->
+			<div id="intro">
+				<h1>CAD Projects</h1>
+				<p>Page under construction. Until then, you can enjoy the pictures and videos from the project!</p>
+				<ul class="actions">
+					<li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Explore</a></li>
+				</ul>
+			</div>
+
+			<!-- Header -->
+			<header id="header">
+				<a href="project.html" class="logo">Back to Projects</a>
+			</header>
+
+			<!-- Nav -->
+			<nav id="nav">
+				<ul class="icons">
+					<li><a href="#" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+					<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+				</ul>
+			</nav>
+
+			<!-- Main Content -->
+			<div id="main">
+				<!-- Project Overview -->
+				<article class="post featured">
+					<section id="video-section">
+                        <h2>Project Demo Video</h2>
+                        <article>
+                            <video controls width="100%" poster="images/toyblockpic.png">
+                                <source src="images/toyblockvid.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </article>
+
+						<article>
+                            <video controls width="100%" poster="images/glassbottle.png">
+                                <source src="images/glassbottle.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </article>
+
+						<article>
+                            <video controls width="100%" poster="images/paperclip.png">
+                                <source src="images/paperclip.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </article>
+    
+                    <!-- Gallery Section -->
+                    <h2>Project pictures</h2>
+                    <section id="gallery" class="posts">
+                        <article>
+                            <a class="image"><img width="100%" src="images/toyblockpic.png" alt="CAD Image 1" /></a>
+                        </article>
+						<article>
+                            <a class="image"><img width="100%" src="images/glassbottle.png" alt="CAD Image 2" /></a>
+                        </article>
+						<article>
+                            <a class="image"><img width="100%" src="images/paperclip.png" alt="CAD Image 3" /></a>
+                        </article>
+                        <!-- Add more images as needed -->
+                    </section>
+				</article>
+			</div>
+
+			<!-- Footer -->
+			<footer id="footer">
+				<section class="split contact">
+					<section class="alt">
+						<h3>Contact</h3>
+						<p>If you'd like to know more about this project, please reach out.</p>
+					</section>
+					<section>
+						<h3>Email</h3>
+						<p><a href="mailto:winston.doss@gmail.com">winston.doss@gmail.com</a></p>
+					</section>
+				</section>
+			</footer>
+
+			<!-- Copyright -->
+			<div id="copyright">
+				<ul><li>&copy; My Portfolio</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+			</div>
+
+		</div>
+
+		<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
