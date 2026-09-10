@@ -1,95 +1,365 @@
 <!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
 <html>
-    <head>
-        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-        <title>DARPA TRIAGE CHALLENGE - AIRLAB</title>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-        <link rel="stylesheet" href="assets/css/main.css" />
-        <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-        <style>
-            #gallery { display:flex; gap:20px; flex-wrap:wrap; }
-            #gallery article { flex:1 1 45%; }
-            #gallery img { width:100%; height:auto; }
-            @media (max-width:768px){ #gallery article{flex:1 1 100%;} }
-        </style>
-    </head>
-    <body class="is-preload">
+	<head>
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+		<title>Casualty 3D Localization Stack — AirLab, CMU</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<style>
+			/* Video gallery — horizontal flex, responsive */
+			#video-section {
+				display: flex;
+				justify-content: space-between;
+				gap: 20px;
+				flex-wrap: wrap;
+			}
 
-        <!-- Wrapper -->
-        <div id="wrapper" class="fade-in">
+			#video-section article {
+				flex: 1;
+				max-width: 45%;
+			}
 
-            <!-- Intro -->
-            <div id="intro">
-                <h1>DARPA TRIAGE CHALLENGE</h1>
-                <p>Page under construction. Until then, you can enjoy the pictures and videos from the project!</p>
-                <ul class="actions">
-                    <li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Explore</a></li>
-                </ul>
-            </div>
+			#video-section h2 {
+				text-align: center;
+				width: 100%;
+			}
 
-            <!-- Header -->
-            <header id="header">
-                <a href="project.html" class="logo">Back to Projects</a>
-            </header>
+			video {
+				width: 100%;
+				max-height: 1200px;
+				object-fit: cover;
+			}
 
-            <!-- Nav -->
-            <nav id="nav">
-                <ul class="icons">
-                </ul>
-            </nav>
+			#video-section p {
+				text-align: center;
+				margin-top: 0.5em;
+				font-style: italic;
+				font-size: 0.9em;
+			}
 
-            <!-- Main Content -->
-            <div id="main">
-                <article class="post featured">
-                    <h2 class="align-center">AIRLAB — DARPA TRIAGE CHALLENGE</h2>
-                    <p class="align-center">At AIRLAB I work on the autonomy team handling monocular vision to detect and localize casualties.</p>
+			@media (max-width: 768px) {
+				#video-section {
+					flex-direction: column;
+					align-items: center;
+				}
+				#video-section article {
+					max-width: 100%;
+					margin-bottom: 20px;
+				}
+			}
 
-                    <h2>Project pictures</h2>
-                    <section id="gallery" class="posts">
-                        <article>
-                            <a class="image"><img src="images/detections.png" alt="Detections" /></a>
-                        </article>
-                        <article>
-                            <a class="image"><img src="images/graphs.png" alt="Graphs" /></a>
-                        </article>
-                        <article>
-                            <a class="image"><img src="images/localisation.png" alt="Graphs" /></a>
-                        </article>
-                    </section>
-                </article>
-            </div>
+			/* Image gallery */
+			#gallery {
+				display: flex;
+				gap: 20px;
+				flex-wrap: wrap;
+			}
 
-            <!-- Footer -->
-            <footer id="footer">
-                <section class="split contact">
-                    <section class="alt">
-                        <h3>Contact</h3>
-                        <p>If you'd like to know more about this project, please reach out.</p>
-                    </section>
-                    <section>
-                        <h3>Email</h3>
-                        <p><a href="mailto:winston.doss@gmail.com">winston.doss@gmail.com</a></p>
-                    </section>
-                </section>
-            </footer>
+			#gallery article {
+				flex: 1 1 45%;
+			}
 
-            <!-- Copyright -->
-            <div id="copyright">
-                <ul><li>&copy; My Portfolio</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
-            </div>
+			#gallery img {
+				width: 100%;
+				height: auto;
+			}
 
-        </div>
+			#gallery p {
+				text-align: center;
+				margin-top: 0.5em;
+				font-style: italic;
+				font-size: 0.9em;
+			}
 
-        <!-- Scripts -->
-        <script src="assets/js/jquery.min.js"></script>
-        <script src="assets/js/jquery.scrollex.min.js"></script>
-        <script src="assets/js/jquery.scrolly.min.js"></script>
-        <script src="assets/js/browser.min.js"></script>
-        <script src="assets/js/breakpoints.min.js"></script>
-        <script src="assets/js/util.js"></script>
-        <script src="assets/js/main.js"></script>
+			@media (max-width: 768px) {
+				#gallery article { flex: 1 1 100%; }
+			}
 
-    </body>
+			/* Pipeline list spacing */
+			.pipeline-list {
+				margin-left: 1.5em;
+			}
+
+			.pipeline-list li {
+				margin-bottom: 0.75em;
+			}
+
+			/* Stack / contribution lists */
+			.role-list li {
+				margin-bottom: 0.5em;
+			}
+		</style>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+		<div id="wrapper" class="fade-in">
+
+			<!-- Intro / Hero -->
+			<div id="intro">
+				<h1>Casualty 3D Localization Stack</h1>
+				<p>DARPA Triage Challenge &middot; AirLab, Carnegie Mellon University &middot; Oct 2025 – Jun 2026</p>
+				<ul class="actions">
+					<li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Explore</a></li>
+				</ul>
+			</div>
+
+			<!-- Header -->
+			<header id="header">
+				<a href="ongoingproject.html" class="logo">Back to Ongoing Projects</a>
+			</header>
+
+			<!-- Nav -->
+			<nav id="nav">
+				<ul class="icons">
+				</ul>
+			</nav>
+
+			<!-- Main Content -->
+			<div id="main">
+				<article class="post featured">
+
+					<!-- Overview -->
+					<header class="major">
+						<h2>Overview</h2>
+					</header>
+
+					<p>
+						The DARPA Triage Challenge tasks autonomous ground robots with rapidly locating and triaging
+						casualties across large, complex environments. As part of Team Chiron at AirLab,
+						Carnegie Mellon University, I built the ROS 2 perception pipeline responsible for detecting
+						casualties and reporting their 3D positions to the downstream autonomy stack in real time.
+						The system ran on a Boston Dynamics Spot quadruped during field preparations from
+						October 2025 through June 2026.
+					</p>
+
+					<p>
+						The core engineering challenge was producing reliable, low-latency 3D casualty positions
+						from noisy sensor data across six simultaneous camera streams while the robot moved through
+						unstructured terrain. The pipeline integrates object detection, LiDAR-based depth estimation,
+						and a tracking layer that outputs stable positions in the robot's SLAM/odometry frame,
+						ready for downstream planning and reporting.
+					</p>
+
+					<hr />
+
+					<!-- Pipeline -->
+					<h2>Pipeline</h2>
+
+					<p>
+						The stack is composed of three ROS 2 nodes operating as a detection–localization–tracking
+						chain, deployed on-robot inside a Dockerized container:
+					</p>
+
+					<ol class="pipeline-list">
+						<li>
+							<strong>Detection</strong> — A fine-tuned RF-DETR model runs inference
+							across all six onboard RGB camera streams simultaneously. Each frame produces
+							2D bounding boxes with confidence scores for detected casualties,
+							which are passed to the localization service.
+						</li>
+						<li>
+							<strong>LiDAR Projection &amp; Clustering</strong> — For each 2D bounding box,
+							the LiDAR point cloud is projected into the camera frame and the points falling
+							inside the box are extracted. These points are clustered and scored against
+							several criteria — point density, spatial extent, depth consistency, and
+							bounding box alignment — to isolate the best candidate cluster for the
+							detected person.
+						</li>
+						<li>
+							<strong>3D Ground Contact Estimation</strong> — The selected cluster is used
+							to compute a 3D ground contact point, giving the casualty's position relative
+							to the robot body. A geometry-based fallback using camera TF transforms and
+							bounding box pitch offset handles cases where LiDAR returns inside the box
+							are too sparse.
+						</li>
+						<li>
+							<strong>Tracking</strong> — A tracker node consumes the stream of 3D position
+							measurements, associates each one with an existing track via distance-based
+							nearest-neighbour matching, and averages positions over a sliding window for
+							robustness. Tracks are continuously transformed into the SLAM/odometry frame
+							so that published positions remain valid as the robot moves.
+							The tracker publishes a <code>TrackedHumanArray</code> at approximately 10 Hz
+							for downstream planning.
+						</li>
+						<li>
+							<strong>Deployment &amp; Visualization</strong> — The full pipeline runs
+							on-robot in a Dockerized container with a tmux-managed launch workflow.
+							Annotated camera streams and live 3D casualty markers are visualized in
+							Foxglove, enabling real-time monitoring and debugging during field runs.
+						</li>
+					</ol>
+
+					<hr />
+
+					<!-- Demo Videos -->
+					<h2>Demo Videos</h2>
+
+					<section id="video-section">
+
+						<article>
+							<video controls width="100%">
+								<source src="images/casualty_lidar_projection.webm" type="video/webm">
+								Your browser does not support the video tag.
+							</video>
+							<p>LiDAR point cloud projected into the camera frame, with 2D detection box overlay</p>
+						</article>
+
+						<article>
+							<video controls width="100%">
+								<source src="images/casualty_single_target.webm" type="video/webm">
+								Your browser does not support the video tag.
+							</video>
+							<p>Single-target casualty detection and localization</p>
+						</article>
+
+						<article>
+							<video controls width="100%">
+								<source src="images/casualty_tracking_multi_cropped.mp4" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+							<p>Multi-target casualty tracking — 3D markers in SLAM/odometry frame</p>
+						</article>
+
+						<article>
+							<video controls width="100%">
+								<source src="images/casualty_overview.mp4" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+							<p>Pipeline overview</p>
+						</article>
+
+						<article>
+							<video controls width="100%">
+								<source src="images/casualty_walking.mp4" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+							<p>Field test — Spot walking with live detection active</p>
+						</article>
+
+					</section>
+
+					<hr />
+
+					<!-- Image Gallery -->
+					<h2>Project Images</h2>
+
+					<section id="gallery">
+
+						<article>
+							<a class="image">
+								<img src="images/casualty_field_spot.jpeg"
+									 alt="Spot robot at DARPA Triage Challenge field test" />
+							</a>
+							<p>Spot at a DARPA Triage Challenge field test</p>
+						</article>
+
+						<article>
+							<a class="image">
+								<img src="images/detections.png"
+									 alt="RF-DETR casualty detections across RGB camera streams" />
+							</a>
+							<p>RF-DETR casualty detections across RGB camera streams</p>
+						</article>
+
+						<article>
+							<a class="image">
+								<img src="images/graphs.png"
+									 alt="Tracker performance and localization diagnostics" />
+							</a>
+							<p>Tracker performance and localization diagnostics</p>
+						</article>
+
+						<article>
+							<a class="image">
+								<img src="images/localisation.png"
+									 alt="3D casualty localization visualization in Foxglove" />
+							</a>
+							<p>3D casualty localization visualization in Foxglove</p>
+						</article>
+
+					</section>
+
+					<hr />
+
+					<!-- My Contribution -->
+					<h2>My Contribution</h2>
+
+					<ul class="role-list">
+						<li>Designed and implemented the end-to-end ROS 2 casualty detection and 3D localization pipeline</li>
+						<li>Integrated a fine-tuned RF-DETR detection model across six simultaneous RGB camera streams</li>
+						<li>Built the LiDAR point cloud projection, clustering, and scoring module for per-bounding-box 3D localization</li>
+						<li>Implemented the geometry-based fallback localizer using camera TF transforms and bounding box pitch offset</li>
+						<li>Developed the casualty tracker: nearest-neighbour data association, sliding-window position averaging, and SLAM-frame transform integration</li>
+						<li>Managed Dockerized on-robot deployment and live Foxglove visualization for field runs</li>
+						<li>Validated the pipeline in live field tests on Team Chiron's Spot platform</li>
+					</ul>
+
+					<hr />
+
+					<!-- Tech Stack -->
+					<h2>Tech Stack</h2>
+
+					<ul class="role-list">
+						<li>ROS 2 Humble &middot; Python</li>
+						<li>Boston Dynamics Spot</li>
+						<li>RF-DETR (fine-tuned casualty detection)</li>
+						<li>LiDAR point cloud processing</li>
+						<li>TF2 &middot; SuperOdometry SLAM</li>
+						<li>Docker &middot; Foxglove</li>
+					</ul>
+
+					<hr />
+
+					<!-- Status -->
+					<h2>Status</h2>
+
+					<p>
+						Ongoing field-validated research engineering work. The pipeline ran on Team Chiron's
+						Spot platform during DARPA Triage Challenge preparations at AirLab,
+						Carnegie Mellon University (Oct 2025 – Jun 2026).
+					</p>
+
+				</article>
+			</div>
+
+			<!-- Footer -->
+			<footer id="footer">
+				<section class="split contact">
+					<section class="alt">
+						<h3>Contact</h3>
+						<p>If you'd like to know more about this project, please reach out.</p>
+					</section>
+					<section>
+						<h3>Email</h3>
+						<p><a href="mailto:winston.doss@gmail.com">winston.doss@gmail.com</a></p>
+					</section>
+				</section>
+			</footer>
+
+			<!-- Copyright -->
+			<div id="copyright">
+				<ul><li>&copy; My Portfolio</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+			</div>
+
+		</div>
+
+		<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+
+	</body>
 </html>

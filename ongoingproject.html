@@ -138,13 +138,32 @@
 
 								<article>
 									<header>
-										<h2>DARPA TRIAGE CHALLENGE — AIRLAB</h2>
+										<span class="date">Apr 2026 – Present</span>
+										<h2>Casualty Detection Model Training &amp; Label Review Platform — AirLab, CMU</h2>
 									</header>
-									<a href="#" class="image fit"><img src="images/detections.png" alt="Detections" /></a>
-									<p>The DARPA TRIAGE CHALLENGE focuses on using autonomous robots to perform rapid triage —
-										sorting people by severity or need to prioritise care. At AIRLAB I work on the autonomy team,
-										responsible for monocular vision to detect and localize casualties for downstream planning
-										and response.</p>
+									<a href="casualty-training.html" class="image fit"><img src="images/label_review_ui_outer.jpeg" alt="Label review app — first-pass review of SAM3-generated casualty detection labels on aerial imagery" /></a>
+									<p>Reproducible training and evaluation pipelines for YOLO and RF-DETR casualty-detection models,
+										built for the DARPA Triage Challenge at AirLab, CMU. Fine-tuned RF-DETR on historical
+										field data, achieving F1 +0.0919 and AP50 +0.1432 over the baseline. Also designed and deployed
+										a self-hosted, multi-user web app for reviewing SAM3-generated labels — supporting rapid first-pass
+										triage, expert correction, verification, and YOLO-format export.</p>
+									<ul class="actions special">
+										<li><a href="casualty-training.html" class="button">Learn more</a></li>
+									</ul>
+								</article>
+
+								<article>
+									<header>
+										<span class="date">Oct 2025 – Jun 2026</span>
+										<h2>Casualty 3D Localization Stack — AirLab, CMU</h2>
+									</header>
+									<a href="darpa.html" class="image fit"><img src="images/casualty_field_spot.jpeg" alt="Spot robot at DARPA Triage Challenge field test" /></a>
+									<p>ROS 2 perception pipeline on a Boston Dynamics Spot robot for real-time 3D casualty
+										localization, built for the DARPA Triage Challenge with Team Chiron at AirLab, CMU.
+										Detects casualties using a fine-tuned RF-DETR model across six RGB camera streams, then
+										projects 2D bounding boxes into the LiDAR point cloud for clustering, filtering, and 3D
+										ground contact estimation. Tracked positions are maintained in the SLAM/odometry frame
+										and deployed on-robot via Dockerized launch with live Foxglove visualization.</p>
 									<ul class="actions special">
 										<li><a href="darpa.html" class="button">Learn more</a></li>
 									</ul>

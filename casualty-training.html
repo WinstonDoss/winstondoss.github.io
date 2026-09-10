@@ -1,0 +1,369 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Casualty Detection Model Training &amp; Label Review Platform — AirLab, CMU</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<style>
+			/* Image gallery — horizontal flex, responsive */
+			#gallery {
+				display: flex;
+				gap: 20px;
+				flex-wrap: wrap;
+			}
+
+			#gallery article {
+				flex: 1 1 45%;
+			}
+
+			#gallery img {
+				width: 100%;
+				height: auto;
+			}
+
+			#gallery p {
+				text-align: center;
+				margin-top: 0.5em;
+				font-style: italic;
+				font-size: 0.9em;
+			}
+
+			@media (max-width: 768px) {
+				#gallery article { flex: 1 1 100%; }
+			}
+
+			/* Pipeline / workflow list spacing */
+			.pipeline-list {
+				margin-left: 1.5em;
+			}
+
+			.pipeline-list li {
+				margin-bottom: 0.75em;
+			}
+
+			/* Stack / contribution lists */
+			.role-list li {
+				margin-bottom: 0.5em;
+			}
+
+			/* Mobile-screenshot gallery items — narrower so portrait images don't dominate */
+			.gallery-mobile article {
+				flex: 1 1 28%;
+				max-width: 340px;
+			}
+
+			@media (max-width: 768px) {
+				.gallery-mobile article { flex: 1 1 100%; max-width: 100%; }
+			}
+		</style>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+		<div id="wrapper" class="fade-in">
+
+			<!-- Intro / Hero -->
+			<div id="intro">
+				<h1>Casualty Detection Model Training &amp; Label Review Platform</h1>
+				<p>DARPA Triage Challenge &middot; AirLab, Carnegie Mellon University &middot; Apr 2026 – Present</p>
+				<ul class="actions">
+					<li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Explore</a></li>
+				</ul>
+			</div>
+
+			<!-- Header -->
+			<header id="header">
+				<a href="ongoingproject.html" class="logo">Back to Ongoing Projects</a>
+			</header>
+
+			<!-- Nav -->
+			<nav id="nav">
+				<ul class="icons">
+				</ul>
+			</nav>
+
+			<!-- Main Content -->
+			<div id="main">
+				<article class="post featured">
+
+					<!-- Overview -->
+					<header class="major">
+						<h2>Overview</h2>
+					</header>
+
+					<p>
+						The DARPA Triage Challenge requires autonomous robots to rapidly locate and classify
+						casualties across complex, unstructured environments. Detection quality is a fundamental
+						bottleneck: a model trained on noisy or incorrectly labelled data produces unreliable
+						results in the field regardless of the downstream localization or autonomy stack.
+						As part of Team Chiron at AirLab, Carnegie Mellon University, I built the two systems
+						that address this bottleneck — the model training and evaluation pipelines, and the
+						label review platform that improves the quality of training data before it reaches
+						those pipelines.
+					</p>
+
+					<p>
+						The work has two complementary pillars. The first is a pair of reproducible,
+						config-driven training pipelines for YOLO and RF-DETR casualty-detection models,
+						paired with an evaluation harness that produces comparable operating-point metrics
+						across model variants. The second is a self-hosted, multi-user web application for
+						reviewing and correcting the SAM3-generated bounding-box labels that feed into
+						training — turning raw auto-annotations into verified, exportable YOLO-format labels
+						the pipelines can trust.
+					</p>
+
+					<hr />
+
+					<!-- Pillar 1: Model Training & Evaluation -->
+					<h2>Model Training &amp; Evaluation</h2>
+
+					<p>
+						Both pipelines are designed so that reproducing a training run requires only a
+						config file and a dataset pointer — no manual edits to Python scripts. Evaluation
+						runs the same scoring logic against every run in a batch, producing directly
+						comparable metrics.
+					</p>
+
+					<ol class="pipeline-list">
+						<li>
+							<strong>YOLO training pipeline</strong> — Config-driven (TOML) pipeline for
+							YOLO26 casualty detection. Supports an 80-class COCO head (person at class 0)
+							or a true single-class person head. Handles both standard YOLO bounding-box labels
+							and 9-token quad-polygon labels, converting polygons to axis-aligned boxes
+							transparently. Integrates live Weights &amp; Biases logging. A deterministic
+							dataset preparation step writes a clean cached dataset and YAML before any
+							training begins, keeping source data untouched.
+						</li>
+						<li>
+							<strong>RF-DETR training pipeline</strong> — Multi-profile pipeline supporting
+							both COCO and YOLO dataset layouts, with auto-detection of format. Profiles range
+							from a public-data-only baseline to a fine-tuned run that adds private Gate 2/3
+							field data with stratified 80/20 splitting. A dataset builder records the exact
+							sources, seed, and sampling fractions used, so any run can be reproduced or
+							audited. The active Dump-All fine-tuning run uses the RF-DETR XL architecture
+							on the full historical field dataset. W&B and TensorBoard logging are both
+							supported; periodic held-out evaluation on a separate test set runs at fixed
+							epoch checkpoints during training.
+						</li>
+						<li>
+							<strong>Fine-tuning result</strong> — Fine-tuning RF-DETR on historical field
+							data improved detection performance over the baseline by
+							<strong>F1 +0.0919</strong> and <strong>AP50 +0.1432</strong>.
+						</li>
+						<li>
+							<strong>Evaluation harness</strong> — Batch scorer that discovers training run
+							folders, loads the best checkpoint for each, and runs a confidence threshold
+							sweep with greedy NMS and IoU-based GT matching. Produces best-F1 operating
+							point, AP50, AP50–95, latency percentiles, and peak GPU memory for every run,
+							written to per-run <code>summary.json</code> and an aggregate Excel workbook.
+							Optionally generates visualized prediction overlays at the best-F1 threshold.
+							Supports adding a pretrained COCO baseline as a reference run without any
+							fine-tuned weights.
+						</li>
+						<li>
+							<strong>Checkpoint export</strong> — Training runs produce a
+							<code>checkpoint_best_total.pth</code> artifact. A handoff script bundles
+							the checkpoint, run metadata, and label map into a self-contained artifact
+							directory ready for integration into the deployment pipeline.
+						</li>
+					</ol>
+
+					<hr />
+
+					<!-- Pillar 2: Label Review Platform -->
+					<h2>Label Review Platform</h2>
+
+					<p>
+						SAM3-generated labels automate the bulk of annotation work but introduce errors
+						that degrade model quality if left uncorrected. The label review platform is a
+						self-hosted web application that routes those labels through a structured
+						human-review workflow before export, without overwriting the original label files.
+					</p>
+
+					<ol class="pipeline-list">
+						<li>
+							<strong>Architecture</strong> — Single-instance Python/Gunicorn web server,
+							deployed via Docker Compose with Caddy as a TLS-terminating reverse proxy for
+							internet-facing use. Review state is file-backed and protected by an in-process
+							lock, so review sessions survive server restarts and resume exactly where they
+							left off. Multi-dataset support: each direct child of the configured datasets
+							directory is a standard YOLO dataset root; an admin publishes available datasets
+							without restarting the service.
+						</li>
+						<li>
+							<strong>Review workflow</strong> — Reviewers work through images one at a time.
+							The app starts with a full-frame preview, then guides the reviewer through a
+							zoomed lawn-mower scan with a minimap, then zooms into each existing box for
+							a per-instance <em>Good / Bad / Unsure</em> verdict. Each frame ends with a
+							full-frame missing- and false-label check.
+						</li>
+						<li>
+							<strong>Outer / Inner triage roles</strong> — Outer reviewers complete the
+							first-pass sweep, drawing from an automatically managed pocket of images.
+							Inner reviewers handle the expert work: resolving <em>Unsure</em> items,
+							correcting boxes marked <em>Bad</em>, verifying those corrections in a second
+							pass, and monitoring overall dataset progress through a dashboard. An Inner
+							admin can generate single-use Outer invitation links for onboarding
+							additional first-pass reviewers.
+						</li>
+						<li>
+							<strong>Export</strong> — Once all items are accepted, a single export
+							action writes reviewed labels and review metadata under a timestamped
+							<code>review_outputs/</code> subdirectory in YOLO format, leaving the
+							original labels untouched. Export is blocked until all queues are empty.
+						</li>
+						<li>
+							<strong>Deployment</strong> — Deployed for team use with role-based accounts,
+							HTTPS-only authenticated sessions, and hourly backups to AirLab network storage.
+							Passwords are stored as salted hashes; sessions expire after 12 hours; disabling
+							an account immediately invalidates its active sessions.
+						</li>
+					</ol>
+
+					<hr />
+
+					<!-- Media Gallery -->
+					<h2>Project Images</h2>
+
+					<section id="gallery" class="gallery-mobile">
+
+						<article>
+							<a class="image">
+								<img src="images/label_review_ui_outer.jpeg"
+									 alt="Label review app — first-pass review showing an aerial crash-site image with SAM3-generated bounding boxes and Bad / Unsure / Good triage buttons" />
+							</a>
+							<p>First-pass (Outer) review — per-instance Bad / Unsure / Good triage on an aerial crash-site frame from the DARPA Triage Challenge dataset</p>
+						</article>
+
+						<article>
+							<a class="image">
+								<img src="images/label_review_ui_correction.jpeg"
+									 alt="Label review app — correction view showing a bad-box indicator and Correct / Pan-Zoom / Edit Box / Save controls on an aerial image" />
+							</a>
+							<p>Correction view — bad-box indicator (red !) with Correct / Pan-Zoom / Edit Box / Save controls for Inner-circle label fixing</p>
+						</article>
+
+						<article>
+							<a class="image">
+								<img src="images/label_review_dataset_chooser.png"
+									 alt="Label review app — dataset chooser modal showing two published YOLO datasets available for review" />
+							</a>
+							<p>Multi-dataset chooser — published YOLO datasets selectable without restarting the service</p>
+						</article>
+
+					</section>
+
+					<section id="gallery" style="margin-top: 1.5em;">
+
+						<article>
+							<a class="image">
+								<img src="images/graphs.png"
+									 alt="RF-DETR evaluation curves — Recall-Confidence and Precision-Recall plots for fine-tuned model on the casualty detection test set" />
+							</a>
+							<p>RF-DETR evaluation — Recall-Confidence and Precision-Recall curves on the casualty detection test set</p>
+						</article>
+
+						<article>
+							<a class="image">
+								<img src="images/detections.png"
+									 alt="YOLO bounding-box detections on casualty imagery — person lying on ground detected across multiple training frames" />
+							</a>
+							<p>YOLO detection output — casualty bounding boxes across a sample of training frames</p>
+						</article>
+
+					</section>
+
+					<hr />
+
+					<!-- My Contribution -->
+					<h2>My Contribution</h2>
+
+					<ul class="role-list">
+						<li>Designed and built the reproducible YOLO training pipeline with config-driven dataset preparation, COCO/polygon label handling, and W&B integration</li>
+						<li>Designed and built the reproducible RF-DETR training pipeline with multi-profile dataset construction, stratified private-data mixing, and periodic held-out evaluation</li>
+						<li>Built the batch evaluation harness: confidence sweep, AP50/AP50–95, best-F1 operating point, latency profiling, and aggregate Excel reporting</li>
+						<li>Fine-tuned RF-DETR on historical field data, achieving F1 +0.0919 and AP50 +0.1432 over the baseline</li>
+						<li>Designed and implemented the label review web application end-to-end: review workflow engine, Outer/Inner role model, multi-dataset support, and YOLO-format export</li>
+						<li>Deployed the label review platform for team use with Docker Compose, Caddy TLS, role-based accounts, and automated hourly backups</li>
+					</ul>
+
+					<hr />
+
+					<!-- Tech Stack -->
+					<h2>Tech Stack</h2>
+
+					<ul class="role-list">
+						<li>Python</li>
+						<li>YOLO (Ultralytics YOLO26) &middot; RF-DETR (XL / 2XL)</li>
+						<li>Weights &amp; Biases &middot; TensorBoard</li>
+						<li>Flask &middot; Gunicorn</li>
+						<li>Docker Compose &middot; Caddy</li>
+						<li>YOLO dataset format (bounding-box &amp; polygon labels)</li>
+						<li>TOML configuration</li>
+					</ul>
+
+					<hr />
+
+					<!-- Status -->
+					<h2>Status</h2>
+
+					<p>
+						Active research engineering work. Both pipelines and the label review platform are
+						in ongoing use for DARPA Triage Challenge model development at AirLab,
+						Carnegie Mellon University (Apr 2026 – Present). Label review sessions are
+						deployed and actively used by Team Chiron for improving the quality of
+						SAM3-generated training annotations.
+					</p>
+
+				</article>
+			</div>
+
+			<!-- Footer -->
+			<footer id="footer">
+				<section class="split contact">
+					<section class="alt">
+						<h3>Address</h3>
+						<p>6637 Wilkins Avenue, Apartment 2, Pittsburgh, PA - 15217 </p>
+					</section>
+					<section>
+						<h3>Phone</h3>
+						<p><a href="#">+1 617 631 0925</a></p>
+					</section>
+					<section>
+						<h3>Email</h3>
+						<p><a href="#">winston.doss@gmail.com</a></p>
+					</section>
+					<section>
+						<h3>Social</h3>
+						<ul class="icons alt">
+							<li><a href="https://www.linkedin.com/in/winston-doss-3b126a226/" class="icon brands alt fa-linkedin"><span class="label">Linkedin</span></a></li>
+						</ul>
+					</section>
+				</section>
+			</footer>
+
+			<!-- Copyright -->
+			<div id="copyright">
+				<ul><li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+			</div>
+
+		</div>
+
+		<!-- Scripts -->
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
